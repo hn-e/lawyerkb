@@ -2,7 +2,22 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
+import { useTheme } from "next-themes";
+
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  return (
+    <button
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="rounded-md p-2 text-foreground/70 hover:text-foreground hover:bg-accent transition-colors"
+      aria-label="Toggle theme"
+    >
+      <Sun className="w-4 h-4 hidden dark:block" />
+      <Moon className="w-4 h-4 block dark:hidden" />
+    </button>
+  );
+}
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -24,12 +39,13 @@ export default function Navbar() {
           <a href="#" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             Legal Drafting
           </a>
-          <Link href="/" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
+          <Link href="/chat" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             AI Assistant
           </Link>
         </div>
 
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-2">
+          <ThemeToggle />
           <button className="rounded-md px-4 py-2 text-sm font-medium text-foreground hover:bg-accent transition-colors">
             Login
           </button>
@@ -58,10 +74,11 @@ export default function Navbar() {
           <a href="#" className="block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             Legal Drafting
           </a>
-          <Link href="/" className="block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors" onClick={() => setMenuOpen(false)}>
+          <Link href="/chat" className="block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors" onClick={() => setMenuOpen(false)}>
             AI Assistant
           </Link>
-          <div className="flex gap-3 pt-2">
+          <div className="flex items-center gap-3 pt-2">
+            <ThemeToggle />
             <button className="rounded-md px-4 py-2 text-sm font-medium text-foreground hover:bg-accent transition-colors">
               Login
             </button>
