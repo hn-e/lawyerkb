@@ -1,22 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getActs } from "@/lib/db";
+import actsList from "@/data/acts-list.json";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const search = searchParams.get("q") || undefined;
+  const search = searchParams.get("q")?.toLowerCase() || "";
 
-  const acts = getActs(search);
+  let filtered = actsList as {
+    id: string;
+    title: string;
+    shortName: string | null;
+    status: string;
+    year: number | null;
+    issuedDate: string | null;
+    provisionCount: number;
+  }[];
+
+  if (search) {
+    filtered = filtered.filter(
+      (a) =>
+        a.title.toLowerCase().includes(search) ||
+        (a.shortName && a.shortName.toLowerCase().includes(search))
+    );
+  }
 
   return NextResponse.json({
-    total: acts.length,
-    acts: acts.map((a) => ({
-      id: a.id,
-      title: a.title,
-      shortName: a.short_name,
-      status: a.status,
-      year: a.issued_date ? parseInt(a.issued_date.substring(0, 4)) : null,
-      issuedDate: a.issued_date,
-      provisionCount: a.provision_count,
-    })),
+    total: filtered.length,
+    acts: filtered,
   });
 }
