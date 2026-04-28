@@ -208,9 +208,9 @@ export default function ActDetailPage() {
               id={`section-${prov.provisionRef || prov.section}`}
               className="scroll-mt-24"
             >
-              <button
+              <div
                 onClick={() => toggleSection(prov.provisionRef || prov.section)}
-                className="w-full text-left group px-5 py-4 rounded-xl hover:bg-muted/30 transition-colors"
+                className="w-full text-left group px-5 py-4 rounded-xl hover:bg-muted/30 transition-colors cursor-pointer"
               >
                 <div className="flex items-start gap-4">
                   <span className="text-sm tabular-nums text-muted-foreground font-medium mt-0.5 shrink-0 w-10 text-right">
@@ -222,12 +222,20 @@ export default function ActDetailPage() {
                         {prov.title || "Untitled"}
                       </h3>
                       {expandedSections.has(prov.provisionRef || prov.section) && (
-                        <button
+                        <span
+                          role="button"
+                          tabIndex={0}
                           onClick={(e) => {
                             e.stopPropagation();
                             copyCitation(prov.section);
                           }}
-                          className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.stopPropagation();
+                              copyCitation(prov.section);
+                            }
+                          }}
+                          className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                           title="Copy citation"
                         >
                           {copiedRef === prov.section ? (
@@ -235,7 +243,7 @@ export default function ActDetailPage() {
                           ) : (
                             <Copy className="w-3.5 h-3.5 text-muted-foreground" />
                           )}
-                        </button>
+                        </span>
                       )}
                     </div>
                     {expandedSections.has(prov.provisionRef || prov.section) && (
@@ -250,7 +258,7 @@ export default function ActDetailPage() {
                     }`}
                   />
                 </div>
-              </button>
+              </div>
             </div>
           ))}
         </div>
