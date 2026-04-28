@@ -33,6 +33,9 @@ export default function Navbar() {
           <Link href="/acts" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             Bare Acts
           </Link>
+          <Link href="/search" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
+            Search
+          </Link>
           <a href="#" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             Judiciary Preparation
           </a>
@@ -67,6 +70,9 @@ export default function Navbar() {
         <div className="md:hidden bg-white/95 dark:bg-background/95 backdrop-blur-md border-b border-border/50 px-8 py-4 space-y-4">
           <Link href="/acts" className="block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors" onClick={() => setMenuOpen(false)}>
             Bare Acts
+          </Link>
+          <Link href="/search" className="block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors" onClick={() => setMenuOpen(false)}>
+            Search
           </Link>
           <a href="#" className="block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             Judiciary Preparation

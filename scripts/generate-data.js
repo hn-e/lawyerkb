@@ -92,6 +92,38 @@ function generate() {
   }
 
   console.log(`Written ${acts.length} act detail files to data/acts/`);
+
+  // Generate search index — all provisions with act metadata for search
+  const searchIndex = db
+    .prepare(
+      `SELECT p.id, p.document_id, p.section, p.title, p.content, p.chapter, p.provision_ref,
+              d.title as act_title, d.short_name as act_short_name, d.issued_date
+       FROM legal_provisions p
+       JOIN legal_documents d ON p.document_id = d.id
+       ORDER BY p.id`
+    )
+    .all();
+
+  const searchData = searchIndex.map((p) => ({
+    id: p.id,
+    actId: p.document_id,
+    actTitle: p.act_title,
+    actShortName: p.act_short_name,
+    actYear: p.issued_date ? parseInt(p.issued_date.substring(0, 4)) : null,
+    section: p.section,
+    title: p.title,
+    chapter: p.chapter,
+    provisionRef: p.provision_ref,
+    // Truncate content for search index — full text is in act detail pages
+    contentPreview: p.content.substring(0, 300),
+  }));
+
+  fs.writeFileSync(
+    path.join(__dirname, "../data/search-index.json"),
+    JSON.stringify(searchData)
+  );
+  console.log(`Written ${searchData.length} provisions to search-index.json`);
+
   db.close();
 }
 
