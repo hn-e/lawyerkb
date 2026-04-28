@@ -5,16 +5,16 @@ export default function Navbar() {
         <div className="font-[family-name:var(--font-playfair)] text-2xl font-bold tracking-tight">KhushAI</div>
 
         <div className="hidden md:flex items-center gap-8">
-          <a href="#" className="font-[family-name:var(--font-playfair)] text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
+          <a href="#" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             Legal Consultancy
           </a>
-          <a href="#" className="font-[family-name:var(--font-playfair)] text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
+          <a href="#" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             Judiciary Preparation
           </a>
-          <a href="#" className="font-[family-name:var(--font-playfair)] text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
+          <a href="#" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             Legal Drafting
           </a>
-          <a href="#" className="font-[family-name:var(--font-playfair)] text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
+          <a href="#" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             AI Legal Tools
           </a>
         </div>
