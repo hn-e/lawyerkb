@@ -1,25 +1,35 @@
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
+
 export default function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50">
-      <div className="flex items-center justify-between bg-white px-8 py-4">
-        <div className="font-[family-name:var(--font-playfair)] text-2xl font-bold tracking-tight">KhushAI</div>
+      <div className="flex items-center justify-between bg-white/90 dark:bg-background/90 backdrop-blur-md px-8 py-4 border-b border-border/50">
+        <Link href="/" className="font-[family-name:var(--font-playfair)] text-2xl font-bold tracking-tight">
+          KhushAI
+        </Link>
 
         <div className="hidden md:flex items-center gap-8">
-          <a href="#" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
-            Legal Consultancy
-          </a>
+          <Link href="/acts" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
+            Bare Acts
+          </Link>
           <a href="#" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             Judiciary Preparation
           </a>
           <a href="#" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             Legal Drafting
           </a>
-          <a href="#" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
-            AI Legal Tools
-          </a>
+          <Link href="/" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
+            AI Assistant
+          </Link>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-3">
           <button className="rounded-md px-4 py-2 text-sm font-medium text-foreground hover:bg-accent transition-colors">
             Login
           </button>
@@ -27,8 +37,40 @@ export default function Navbar() {
             Sign Up
           </button>
         </div>
+
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="md:hidden p-2 text-foreground"
+        >
+          {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
       </div>
-      <div className="h-32 bg-gradient-to-b from-white via-white/60 to-transparent" />
+
+      {/* Mobile menu */}
+      {menuOpen && (
+        <div className="md:hidden bg-white/95 dark:bg-background/95 backdrop-blur-md border-b border-border/50 px-8 py-4 space-y-4">
+          <Link href="/acts" className="block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors" onClick={() => setMenuOpen(false)}>
+            Bare Acts
+          </Link>
+          <a href="#" className="block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
+            Judiciary Preparation
+          </a>
+          <a href="#" className="block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
+            Legal Drafting
+          </a>
+          <Link href="/" className="block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors" onClick={() => setMenuOpen(false)}>
+            AI Assistant
+          </Link>
+          <div className="flex gap-3 pt-2">
+            <button className="rounded-md px-4 py-2 text-sm font-medium text-foreground hover:bg-accent transition-colors">
+              Login
+            </button>
+            <button className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors">
+              Sign Up
+            </button>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

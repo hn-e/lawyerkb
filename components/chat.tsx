@@ -6,7 +6,6 @@ import { useState } from "react";
 import { Textarea } from "./textarea";
 import { ProjectOverview } from "./project-overview";
 import { Messages } from "./messages";
-import { Header } from "./header";
 import { toast } from "sonner";
 
 export default function Chat() {
@@ -27,7 +26,6 @@ export default function Chat() {
 
   return (
     <div className="h-dvh flex flex-col justify-center w-full stretch">
-      <Header />
       {messages.length === 0 ? (
         <div className="max-w-xl mx-auto w-full">
           <ProjectOverview />
