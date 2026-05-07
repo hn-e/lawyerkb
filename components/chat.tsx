@@ -56,24 +56,26 @@ export default function Chat({ templateId }: { templateId?: string }) {
       ) : (
         <Messages messages={messages} isLoading={isLoading} status={status} />
       )}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          sendMessage({ text: input }, { body: { selectedModel, template: template?.id } });
-          setInput("");
-        }}
-        className="pb-8 bg-white dark:bg-black w-full max-w-xl mx-auto px-4 sm:px-0"
-      >
-        <Textarea
-          selectedModel={selectedModel}
-          setSelectedModel={setSelectedModel}
-          handleInputChange={(e) => setInput(e.currentTarget.value)}
-          input={input}
-          isLoading={isLoading}
-          status={status}
-          stop={stop}
-        />
-      </form>
+      {!showDraftingForm && (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            sendMessage({ text: input }, { body: { selectedModel, template: template?.id } });
+            setInput("");
+          }}
+          className="pb-8 bg-white dark:bg-black w-full max-w-xl mx-auto px-4 sm:px-0"
+        >
+          <Textarea
+            selectedModel={selectedModel}
+            setSelectedModel={setSelectedModel}
+            handleInputChange={(e) => setInput(e.currentTarget.value)}
+            input={input}
+            isLoading={isLoading}
+            status={status}
+            stop={stop}
+          />
+        </form>
+      )}
     </div>
   );
 }
