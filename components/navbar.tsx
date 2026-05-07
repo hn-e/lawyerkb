@@ -39,9 +39,9 @@ export default function Navbar() {
           <a href="#" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             Judiciary Preparation
           </a>
-          <a href="#" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
+          <Link href="/drafting" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             Legal Drafting
-          </a>
+          </Link>
           <Link href="/chat" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             AI Assistant
           </Link>
@@ -77,9 +77,9 @@ export default function Navbar() {
           <a href="#" className="block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
             Judiciary Preparation
           </a>
-          <a href="#" className="block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
+          <Link href="/drafting" className="block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors" onClick={() => setMenuOpen(false)}>
             Legal Drafting
-          </a>
+          </Link>
           <Link href="/chat" className="block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors" onClick={() => setMenuOpen(false)}>
             AI Assistant
           </Link>

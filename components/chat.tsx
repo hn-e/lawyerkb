@@ -6,11 +6,19 @@ import { useState } from "react";
 import { Textarea } from "./textarea";
 import { ProjectOverview } from "./project-overview";
 import { Messages } from "./messages";
+import { DraftingForm } from "./drafting-form";
+import { draftingTemplates } from "@/lib/drafting-templates";
 import { toast } from "sonner";
 
-export default function Chat() {
+export default function Chat({ templateId }: { templateId?: string }) {
   const [input, setInput] = useState("");
   const [selectedModel, setSelectedModel] = useState<modelID>(defaultModel);
+  const [factsSubmitted, setFactsSubmitted] = useState(false);
+
+  const template = templateId
+    ? draftingTemplates.find((t) => t.id === templateId)
+    : undefined;
+
   const { sendMessage, messages, status, stop } = useChat({
     onError: (error) => {
       toast.error(
@@ -23,10 +31,25 @@ export default function Chat() {
   });
 
   const isLoading = status === "streaming" || status === "submitted";
+  const showDraftingForm = template && messages.length === 0 && !factsSubmitted;
+
+  const handleFactsSubmit = (facts: string) => {
+    setFactsSubmitted(true);
+    sendMessage(
+      { text: `Draft a ${template!.label.toLowerCase()}. Here are the case details:\n\n${facts}` },
+      { body: { selectedModel, template: template!.id } },
+    );
+  };
 
   return (
     <div className="h-dvh flex flex-col justify-center w-full stretch">
-      {messages.length === 0 ? (
+      {showDraftingForm ? (
+        <DraftingForm
+          template={template}
+          onSubmit={handleFactsSubmit}
+          isLoading={isLoading}
+        />
+      ) : messages.length === 0 ? (
         <div className="max-w-xl mx-auto w-full">
           <ProjectOverview />
         </div>
@@ -36,7 +59,7 @@ export default function Chat() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          sendMessage({ text: input }, { body: { selectedModel } });
+          sendMessage({ text: input }, { body: { selectedModel, template: template?.id } });
           setInput("");
         }}
         className="pb-8 bg-white dark:bg-black w-full max-w-xl mx-auto px-4 sm:px-0"

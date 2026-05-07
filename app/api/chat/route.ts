@@ -1,5 +1,6 @@
 import { model, modelID } from "@/ai/providers";
 import { convertToModelMessages, stepCountIs, streamText, UIMessage } from "ai";
+import { draftingTemplates } from "@/lib/drafting-templates";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -8,13 +9,15 @@ export async function POST(req: Request) {
   const {
     messages,
     selectedModel,
-  }: { messages: UIMessage[]; selectedModel: modelID } = await req.json();
+    template: templateId,
+  }: { messages: UIMessage[]; selectedModel: modelID; template?: string } =
+    await req.json();
 
-  const result = streamText({
-    model: model.languageModel(selectedModel),
-    system: `
+  const template = templateId
+    ? draftingTemplates.find((t) => t.id === templateId)
+    : undefined;
 
-    You are KhushAI, a comprehensive legal AI assistant. You are authorized to assist with a wide range of legal tasks including but not limited to:
+  const baseSystem = `You are KhushAI, a comprehensive legal AI assistant. You are authorized to assist with a wide range of legal tasks including but not limited to:
 
     1. Legal Research — statutes, case law, regulations, legal commentary, and jurisprudence
     2. Legal Drafting — petitions, complaints, motions, contracts, agreements, notices, affidavits, memoranda, and other legal documents
@@ -23,8 +26,15 @@ export async function POST(req: Request) {
     5. Procedural Guidance — court procedures, filing requirements, deadlines, and jurisdictional rules
     6. Case Strategy — identifying legal issues, assessing strengths and weaknesses, and suggesting approaches
     When drafting legal documents, use standard legal formatting and language appropriate to the jurisdiction and document type. If the user does not specify facts or a jurisdiction, you may use illustrative or placeholder facts.
-    You may decline only if a request is clearly outside the legal domain (e.g., medical advice, financial investment advice). For borderline requests with a legal dimension, err on the side of assisting.
-    `,
+    You may decline only if a request is clearly outside the legal domain (e.g., medical advice, financial investment advice). For borderline requests with a legal dimension, err on the side of assisting.`;
+
+  const system = template
+    ? `${baseSystem}\n\n---\n\nDRAFTING INSTRUCTIONS:\n${template.prompt}`
+    : baseSystem;
+
+  const result = streamText({
+    model: model.languageModel(selectedModel),
+    system,
 
     messages: convertToModelMessages(messages),
     stopWhen: stepCountIs(5), // enable multi-step agentic flow
